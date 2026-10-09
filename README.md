@@ -1,6 +1,6 @@
 # Armaduras en juego
 
-Aplicación en español para practicar las 15 armaduras musicales y sus tonalidades mayores y menores. Incluye rondas aleatorias de 10 preguntas, pentagrama, corrección explicada, puntuación, rachas y tabla de ayuda. Adaptada a móvil y escritorio.
+Aplicación en español para practicar las 15 armaduras musicales y sus tonalidades mayores y menores y el modo frigio. Incluye rondas aleatorias de 10 preguntas, pentagrama, corrección explicada, puntuación, rachas y tabla de ayuda. Adaptada a móvil y escritorio.
 
 ## Requisitos y dependencias
 
@@ -63,3 +63,11 @@ La CLI se descarga al ejecutar `npx`; no es una dependencia de la aplicación. R
 Las rondas se mantienen en memoria y se reinician al recargar. La integración opcional con `document.modelContext` se activa solo en navegadores compatibles; no se necesita para jugar. La cuenta y el acceso privado de la versión alojada previamente no forman parte de este código.
 
 Documentación: https://vercel.com/docs/project-configuration y https://vercel.com/docs/deployments
+
+## Actualización: modo frigio y notación
+
+Activa «Practicar también el modo frigio» para responder las tres opciones. Cambiar el modo inicia una nueva ronda; con el modo desactivado, se conservan las preguntas de mayor y menor. El frigio usa el tercer grado de la escala mayor con las mismas alteraciones (Do mayor → Mi frigio). La tabla de ayuda incluye los 15 modos frigios, incluido Mi♯ frigio para siete sostenidos.
+
+Los símbolos de la armadura ahora se dibujan como vectores anclados a cada nota en clave de sol. Las alturas se calculan por pasos diatónicos de medio espacio entre líneas, sin depender de la fuente instalada en el dispositivo.
+
+Ejecuta `npm test` para comprobar posiciones, escalas frigias, puntuación de ambos modos y cambios de ronda.

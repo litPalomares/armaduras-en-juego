@@ -10,7 +10,8 @@
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs src",
     "preview": "node scripts/serve.mjs dist",
-    "start": "node scripts/serve.mjs dist"
+    "start": "node scripts/serve.mjs dist",
+    "test": "node tests/game.cjs"
   },
   "dependencies": {},
   "devDependencies": {}
