@@ -71,3 +71,7 @@ Activa «Practicar también el modo frigio» para responder las tres opciones. C
 Los símbolos de la armadura ahora se dibujan como vectores anclados a cada nota en clave de sol. Las alturas se calculan por pasos diatónicos de medio espacio entre líneas, sin depender de la fuente instalada en el dispositivo.
 
 Ejecuta `npm test` para comprobar posiciones, escalas frigias, puntuación de ambos modos y cambios de ronda.
+
+## Opciones mezcladas y práctica sin imagen
+
+Las respuestas de mayor, menor y frigio se mezclan de forma independiente en cada pregunta, manteniendo todas las opciones disponibles. Desactiva «Mostrar armadura» para practicar solo con el número y tipo de alteraciones. Puedes mostrar u ocultar el pentagrama durante una pregunta sin reiniciar la ronda ni perder tu respuesta. Las dos casillas son independientes.

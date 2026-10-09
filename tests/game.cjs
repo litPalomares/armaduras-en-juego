@@ -2,8 +2,9 @@ const {readFileSync}=require('node:fs');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const nodes={};
-function node(id){return nodes[id]??={value:'',checked:false,disabled:false,innerHTML:'',textContent:'',style:{},attributes:{},classList:{add(){},remove(){},toggle(){}},append(){},setAttribute(k,v){this.attributes[k]=v},addEventListener(){}}}
+function node(id){return nodes[id]??={value:'',checked:false,disabled:false,innerHTML:'',textContent:'',style:{},attributes:{},children:[],hidden:false,classList:{add(){},remove(){},toggle(){}},append(child){this.children.push(child)},replaceChildren(...children){this.children=children},setAttribute(k,v){this.attributes[k]=v},addEventListener(){}}}
 const context={document:{getElementById:node,querySelector:()=>node('answers'),createElement:()=>({})},Math,console};
+node('show-signature').checked=true;
 vm.createContext(context);
 vm.runInContext(readFileSync(new URL('../src/app.js',`file://${__filename}`),'utf8'),context);
 const run=code=>vm.runInContext(code,context);
@@ -45,3 +46,26 @@ node('include-phrygian').checked=true;run('changeMode()');
 node('major').value=run('deck[index][0]');node('minor').value=run('deck[index][1]');node('phrygian').value='wrong';run('submit()');assert.equal(run('hits'),0);
 run('changeMode()');assert.equal(run('index'),0);assert.equal(run('checked'),false);assert.equal(node('phrygian').disabled,false);
 console.log('Verified all 15 signatures, conventional treble positions, all Phrygian interval patterns, both game modes, missing/incorrect Phrygian answers, and mode restart.');
+
+// Fixed randomness verifies shuffling without a flaky statistical assertion.
+const seededMath=Object.create(Math);seededMath.random=()=>0;
+context.Math=seededMath;run('start()');
+for(const [id,column] of [['major',0],['minor',1],['phrygian',3]]){
+ const expected=[...new Set(records.map(k=>k[column]))];
+ const actual=node(id).children.map(o=>o.value);
+ assert.equal(actual[0],'');
+ assert.deepEqual(actual.slice(1).sort(),[...expected].sort());
+ assert.notDeepEqual(actual.slice(1),expected);
+ assert.equal(new Set(actual.slice(1)).size,expected.length);
+}
+const oldState=run('JSON.stringify([index,hits,streak,checked])');
+node('major').value=run('deck[index][0]');
+node('show-signature').checked=false;run('updateImage()');
+assert.equal(node('staff').hidden,true);assert.equal(node('staff').innerHTML,'');
+assert.equal(run('JSON.stringify([index,hits,streak,checked])'),oldState);
+assert.equal(node('major').value,run('deck[index][0]'));
+assert.equal(node('prompt').textContent,run('label(deck[index][2])'));
+run('show()');assert.equal(node('staff').hidden,true);assert.equal(node('staff').innerHTML,'');
+node('show-signature').checked=true;run('updateImage()');
+assert.equal(node('staff').hidden,false);assert(node('staff').innerHTML.includes('<line'));
+console.log('Verified independently shuffled complete answer lists and image toggle without changing score or selections.');
